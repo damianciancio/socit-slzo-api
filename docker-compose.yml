@@ -1,0 +1,21 @@
+version: '2'
+services:
+  mysql:
+    container_name: socit_mysql
+    restart: always
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root123'
+      MYSQL_USER: 'socit'
+      MYSQL_PASS: 'root123'
+      MYSQL_DATABASE: 'socit'
+    volumes:
+      - my-datavolume:/var/lib/mysql
+    networks:
+      - socitdb
+volumes:
+  my-datavolume:
+networks:
+  socitdb:

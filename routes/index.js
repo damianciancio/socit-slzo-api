@@ -7,8 +7,8 @@ var jwt = require('express-jwt');
 var auth = jwt({
     secret: 'clavesecreta',
     userProperty: 'payload', 
-    algorithms: ['RS256']
+    algorithms: ['sha1', 'RS256', 'HS256'],
 });
-router.use('/users', require('./users'));
+router.use('/users', auth, require('./users'));
 
 module.exports = router;

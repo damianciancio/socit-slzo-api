@@ -18,22 +18,42 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', function(req, res){
 
-    const user = db.models.User(req.body.user);
+    const user = db.models.User.build(req.body);
 
     user.setPassword(req.body.password);
-
     user.save();
-    req.login(player, function(err) {
+
+    req.login(user, function(err) {
         if (err) {
             console.log(err);
         }
-        var token = player.generateJwt();
+        var token = user.generateJwt();
         res.send({
-            user: player,
+            user: user,
             token: token   
         });    
     })
 });
+
+router.put('/', async function(req, res) {
+    const user_id = req.body.user_id;
+    if (!user_id) {
+        return res.status(409).send('You must provide user_id');
+    }
+
+    const user = await db.models.User.findByPk(user_id);
+    if (!user) {
+        return res.status(404).send('User not found');
+    }
+
+    for(let property in req.body) {
+        user[property] = req.body[property];
+    }
+
+    await user.save();
+    return res.send(user);
+});
+
 /*  
 router.post('/login', function(req, res, next){
     User.findOne({username: req.body.username})

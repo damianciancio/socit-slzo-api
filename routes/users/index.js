@@ -15,20 +15,26 @@ router.get('/:id', async (req, res) => {
     });
     res.send(users);
 });
-/*
+
 router.post('/', function(req, res){
-    
-    let user = new User({
-        username: req.body.username,
-        name: req.body.name
-    });
+
+    const user = db.models.User(req.body.user);
 
     user.setPassword(req.body.password);
 
     user.save();
-    res.send(user);
+    req.login(player, function(err) {
+        if (err) {
+            console.log(err);
+        }
+        var token = player.generateJwt();
+        res.send({
+            user: player,
+            token: token   
+        });    
+    })
 });
-  
+/*  
 router.post('/login', function(req, res, next){
     User.findOne({username: req.body.username})
     .then(function(user){

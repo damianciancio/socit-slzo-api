@@ -10,5 +10,6 @@ var auth = jwt({
     algorithms: ['sha1', 'RS256', 'HS256'],
 });
 router.use('/users', auth, require('./users'));
+router.use('/login', require('./login'));
 
 module.exports = router;

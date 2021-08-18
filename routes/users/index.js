@@ -10,10 +10,25 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    const users = await db.models.User.findAll({
-        include: 'role'
+    console.log(req.params.id);
+
+    if (isNaN(req.params.id)) {
+        return res.status(409).send({message: 'Invalid parameter'});
+    }
+
+    const user = await db.models.User.findOne({
+        include: 'role',
+        where: {
+            user_id: req.params.id
+        }
     });
-    res.send(users);
+
+    if (user === null) {
+        return res.status(404).send({message: 'Usuario no encontrado'})
+    }
+
+    console.log(user);
+    res.send(user);
 });
 
 router.post('/', function(req, res){

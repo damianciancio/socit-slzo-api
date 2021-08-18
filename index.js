@@ -53,6 +53,7 @@ sequelize.authenticate().then(() => {
     const user = await sequelize.models.User.create({
       email: 'damianciancio7@gmail.com',
       name: 'Damián',
+      username: 'damian',
       lastname: 'Ciancio',
       financial_status: 'ok',
       active: true,

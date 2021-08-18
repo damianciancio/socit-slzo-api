@@ -1,6 +1,6 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-const sequelize = require('../services/data');
+const db = require('../services/data');
 
 passport.serializeUser(function(user, done) {
     done(null, user);
@@ -15,11 +15,7 @@ passport.use(
         {
             usernameField: 'username'
         }, function(username, password, done){
-            db.models.User.findOne({ where: {username: username} }, function(err, user){
-                if(err){
-                    return done(err);
-                }
-
+            db.models.User.findOne({ where: {username: username} }).then(function(user){
                 if(!user){
                     return done(null, false, {
                         message: "Usuario no encontrado"
@@ -33,7 +29,10 @@ passport.use(
                 }
                 
                 return done(null, user);
-            })          
+            })
+            .catch(err => {
+                done(err);
+            });
         }
     )
 )
